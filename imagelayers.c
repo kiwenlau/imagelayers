@@ -12,7 +12,7 @@ int main()
     char str[200], *substr, *repository;
     int len, N, layers;
     
-    system("docker images -tree > tempfile1.txt 2>&1");
+    system("sudo docker images -tree > tempfile1.txt 2>&1");
     system("cat tempfile1.txt | grep Tags > tempfile2.txt");
     fp=fopen("tempfile2.txt", "rt");
     
