@@ -9,14 +9,14 @@
 int main()
 {
     FILE *fp;
-    char str[200], *substr, *images;
+    char str[200], *substr, *image;
     int len, N, layers;
     
     system("docker images -tree > tempfile1.txt 2>&1");
     system("cat tempfile1.txt | grep Tags > tempfile2.txt");
     fp=fopen("tempfile2.txt", "rt");
     
-    printf("LAYERS   IMAGE\n");
+    printf("NAME                TAG                 LAYERS\n");
     while(fgets(str, 200, fp))
     {
         //replace '\n' with '\0'
@@ -31,16 +31,44 @@ int main()
         layers=(N-19)/2;
         
         //get the image name
-        images=strstr(str, "Tags");
-        images=images+6;
+        image=strstr(str, "Tags");
+        image=image+6;
         
-        printf("%2d:      %s\n", layers, images);
+        //printf("%2d:      %s\n", layers, image);
+        
+        //print image and layers
+        printlayer(image, layers);
     }
     
     remove("tempfile1.txt");
     remove("tempfile2.txt");
     
     fclose(fp);
+}
+
+
+int printlayer(char *image, int layers)
+{
+    char *s1, *s2;
+    char repository[20], tag[20];
+    int len, i;
+    
+    
+    s1=strtok(image, ":");
+    s2=strtok(NULL, ":");
+    
+    strcpy(repository, s1);
+    strcpy(tag, s2);
+    
+    for (i=strlen(s1); i<20; i++)
+        repository[i]=' ';
+    repository[19]='\0';
+    
+    for (i=strlen(s2); i<20; i++)
+        tag[i]=' ';
+    tag[19]='\0';
+    
+    printf("%s %s %d\n", repository, tag, layers);
 }
 
 
