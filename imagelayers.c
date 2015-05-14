@@ -9,7 +9,7 @@
 int main()
 {
     FILE *fp;
-    char str[200], *substr, *repository;
+    char str[200], *substr, *repository, *s;
     int len, N, layers;
     
     system("sudo docker images -tree > tempfile1.txt 2>&1");
@@ -26,9 +26,13 @@ int main()
         //caculate the number of image layers
         substr=strstr(str, "Virtual");
         N=strlen(str)-strlen(substr);
-        if (!strstr(str, "│"))
-            N=N+2;
-        layers=(N-19)/2;
+        s=strstr(str, "│");
+        while (s)
+        {
+            s=strstr(s+6, "│");
+            N=N-3;
+        }
+        layers=(N-18)/2+1;
         
         //get the repository name
         repository=strstr(str, "Tags");
