@@ -9,14 +9,14 @@
 int main()
 {
     FILE *fp;
-    char str[200], *substr, *image;
+    char str[200], *substr, *repository;
     int len, N, layers;
     
     system("docker images -tree > tempfile1.txt 2>&1");
     system("cat tempfile1.txt | grep Tags > tempfile2.txt");
     fp=fopen("tempfile2.txt", "rt");
     
-    printf("REPOSITORY                              LAYERS\n");
+    printf("REPOSITORY                               LAYERS\n");
     while(fgets(str, 200, fp))
     {
         //replace '\n' with '\0'
@@ -30,39 +30,17 @@ int main()
             N=N+2;
         layers=(N-19)/2;
         
-        //get the image name
-        image=strstr(str, "Tags");
-        image=image+6;
+        //get the repository name
+        repository=strstr(str, "Tags");
+        repository=repository+6;
         
-        //printf("%2d:      %s\n", layers, image);
-        
-        //print image and layers
-        printlayer(image, layers);
+        printf("%-40s %d\n", repository, layers);
     }
     
     remove("tempfile1.txt");
     remove("tempfile2.txt");
     
     fclose(fp);
-}
-
-
-int printlayer(char *image, int layers)
-{
-    char repository[40];
-    int len, i;
-
-    
-    strcpy(repository, image);
-    
-    len=strlen(image);
-    
-    for (i=len; i<40; i++)
-        repository[i]=' ';
-    repository[39]='\0';
-    
-    
-    printf("%s %d\n", repository, layers);
 }
 
 
