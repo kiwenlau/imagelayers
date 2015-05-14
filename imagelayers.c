@@ -16,7 +16,7 @@ int main()
     system("cat tempfile1.txt | grep Tags > tempfile2.txt");
     fp=fopen("tempfile2.txt", "rt");
     
-    printf("NAME                TAG                 LAYERS\n");
+    printf("REPOSITORY                              LAYERS\n");
     while(fgets(str, 200, fp))
     {
         //replace '\n' with '\0'
@@ -49,26 +49,20 @@ int main()
 
 int printlayer(char *image, int layers)
 {
-    char *s1, *s2;
-    char repository[20], tag[20];
+    char repository[40];
     int len, i;
+
     
+    strcpy(repository, image);
     
-    s1=strtok(image, ":");
-    s2=strtok(NULL, ":");
+    len=strlen(image);
     
-    strcpy(repository, s1);
-    strcpy(tag, s2);
-    
-    for (i=strlen(s1); i<20; i++)
+    for (i=len; i<40; i++)
         repository[i]=' ';
-    repository[19]='\0';
+    repository[39]='\0';
     
-    for (i=strlen(s2); i<20; i++)
-        tag[i]=' ';
-    tag[19]='\0';
     
-    printf("%s %s %d\n", repository, tag, layers);
+    printf("%s %d\n", repository, layers);
 }
 
 
