@@ -34,13 +34,30 @@ int main()
         repository=strstr(str, "Tags");
         repository=repository+6;
         
-        printf("%-40s %d\n", repository, layers);
+        //print repository name and image layers number
+        printlayer(repository, layers);
     }
     
     remove("tempfile1.txt");
     remove("tempfile2.txt");
     
     fclose(fp);
+}
+
+int printlayer(char *repository, int layers)
+{
+    char *s;
+    if(!strchr(repository, ',')) //repository with single tag
+        printf("%-40s %d\n", repository, layers);
+    else  //repository with multiple tags
+    {
+        s=strtok(repository, " ,");
+        while(s)
+        {
+            printf("%-40s %d\n", s, layers);
+            s=strtok(NULL, " ,");
+        }
+    }
 }
 
 
